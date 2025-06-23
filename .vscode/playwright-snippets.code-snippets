@@ -1,0 +1,47 @@
+{
+	"import_config": {
+		"prefix": "pImportLogin",
+		"body": [
+			"import { test, expect } from '@playwright/test';",
+
+			"test('myTestName', async ({ page }) => {",
+      		
+			"});"
+		],
+		"description": "Basic Playwright login test snippet"
+	},
+
+	"Playwright Page Object": {
+    "prefix": "pPageObject",
+    "body": [
+      "import { Page, Locator } from '@playwright/test';",
+      "",
+      "export class MY PAGE NAME {",
+      "  readonly page: Page;",
+      "  readonly ELEMENTNAME: Locator;",
+      "",
+      "  constructor(page: Page) {",
+      "    this.page = page;",
+      "    this.ELEMENTNAME = page.locator('MYSELECTOR');",
+      "  }",
+      "",
+      "  async goto() {",
+      "    await this.page.goto('MYURL');",
+      "  }",
+      "",
+      "  async NYACTION() {",
+      "    await this.ELEMENTNAME.click();",
+      "  }",
+      "}"
+    ],
+    "description": "Basic Playwright Page Object pattern template"
+	},
+
+	"Expect element to be visible": {
+		"prefix": "pexpectVisible",
+		"body": [
+		"await expect(MYELEMENT).toBeVisible();"
+	],
+  	"description": "Check that the element is visible on the page"
+}
+}
