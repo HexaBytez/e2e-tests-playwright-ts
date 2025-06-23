@@ -1,20 +1,29 @@
 import { test as base, expect } from '@playwright/test';
 import { authForm } from '../page/aForm';
 
-const test = base.extend<{
+type Fixtures = {
+  authForm: authForm;
   credentials: { username: string; password: string };
-}>({
+};
+
+const test = base.extend<Fixtures>({
   credentials: [{ username: '', password: '' }, { option: true }],
-});
 
-let AuthForm: authForm;
+  // создаём новый экземпляр authForm для каждого теста
+  authForm: async ({ page, credentials }, use) => {
+    const form = new authForm(page);
+    await form.goto();
+    await form.usernameFieldFill(credentials.username);
+    await form.passwordFieldFill(credentials.password);
+    await form.loginButtonAuthForm();
 
-test.beforeEach(async ({ page, credentials }) => {
-  AuthForm = new authForm(page);
-  await AuthForm.goto();
-  await AuthForm.usernameFieldFill(credentials.username);
-  await AuthForm.passwordFieldFill(credentials.password);
-  await AuthForm.loginButtonAuthForm();
+    await use(form);
+    await page.context().clearCookies();
+    await page.evaluate(() => {
+      localStorage.clear();
+      sessionStorage.clear();
+    });
+  },
 });
 
 test.describe('Positive Login', () => {
@@ -22,8 +31,8 @@ test.describe('Positive Login', () => {
     credentials: { username: 'standard_user', password: 'secret_sauce' },
   });
 
-  test('authorizationTest - valid login', async () => {
-    await AuthForm.authorizationCheck();
+  test('authorizationTest - valid login', async ({ authForm }) => {
+    await authForm.authorizationCheck();
   });
 });
 
@@ -32,7 +41,7 @@ test.describe('Negative Login', () => {
     credentials: { username: 'wrong_user', password: 'wrong_password' },
   });
 
-  test('negativeScenarioFirst - invalid login', async () => {
-    await AuthForm.exceptionAuth();
+  test('negativeScenarioFirst - invalid login', async ({ authForm }) => {
+    await authForm.exceptionAuth();
   });
 });
