@@ -1,6 +1,5 @@
 name: Playwright Tests
 
-# Запускаем workflow на пушах и pull request-ах в ветку main (можешь заменить main на свою ветку)
 on:
   push:
     branches: [ main ]
