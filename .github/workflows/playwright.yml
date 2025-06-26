@@ -35,13 +35,16 @@ jobs:
       - name: Run Playwright tests on ${{ matrix.browser }}
         run: npx playwright test --project=${{ matrix.browser }}
 
+      - name: Generate Playwright HTML report
+        run: npx playwright show-report --reporter=html --output=playwright-report || true
+
       - name: Clean old Allure report
-        run: rm -rf allure-report
+        run: rm -rf allure-report || true
 
       - name: Generate Allure report
         run: npx allure generate allure-results -o allure-report || true
 
-      - name: Upload Playwright report
+      - name: Upload Playwright HTML report
         if: always()
         uses: actions/upload-artifact@v4
         with:
@@ -53,4 +56,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: allure-report-${{ matrix.browser }}
-          path: allure-report
+          path: allure-repor

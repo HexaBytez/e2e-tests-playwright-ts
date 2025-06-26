@@ -12,6 +12,7 @@ export default defineConfig({
       suiteTitle: false,
       attachments: true,
     }],
+    ['html', { outputFolder: 'playwright-report', open: 'never' }],
   ],
 
   // Глобальные timeout
