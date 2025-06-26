@@ -1,4 +1,4 @@
-// page/authForm.ts
+// ../page/aForm.ts
 import { Page, Locator, expect } from '@playwright/test';
 
 export class authForm {
@@ -7,7 +7,6 @@ export class authForm {
   readonly passwordField: Locator;
   readonly loginButtonAuth: Locator;
   readonly errorField: Locator;
-  readonly errorMessage: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -15,7 +14,6 @@ export class authForm {
     this.passwordField = page.locator('#password');
     this.loginButtonAuth = page.locator('[data-test="login-button"]');
     this.errorField = page.locator('[data-test="error"]');
-    this.errorMessage = page.locator('[data-test="error-button"]');
   }
 
   async goto() {
@@ -37,16 +35,21 @@ export class authForm {
     await this.loginButtonAuth.click();
   }
 
+  async login(username: string, password: string) {
+    await this.goto();
+    await this.usernameFieldFill(username);
+    await this.passwordFieldFill(password);
+    await this.loginButtonAuthForm();
+  }
+
   async authorizationCheck() {
     await this.loginButtonAuth.waitFor({ state: 'hidden' });
     await expect(this.page).toHaveURL(/.*inventory\.html/);
     await expect(this.page.locator('.inventory_list')).toBeVisible();
   }
 
-  async exceptionAuth() {
+  async exceptionAuth(expectedMessage: string) {
     await expect(this.errorField).toBeVisible();
-    await expect(this.errorField).toHaveText(
-      'Epic sadface: Username and password do not match any user in this service'
-    );
+    await expect(this.errorField).toHaveText(expectedMessage);
   }
 }
