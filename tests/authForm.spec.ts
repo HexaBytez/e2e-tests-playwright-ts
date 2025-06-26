@@ -1,22 +1,19 @@
-import { test as base, expect } from '@playwright/test';
+// tests/auth.test.ts
+import { test as base } from '@playwright/test';
 import { authForm } from '../page/aForm';
+import users from '../tests/data.json';
 
 type Fixtures = {
   authForm: authForm;
-  credentials: { username: string; password: string };
+  credentials: { username: string; password: string; errorMessage?: string };
 };
 
 const test = base.extend<Fixtures>({
-  credentials: [{ username: '', password: '' }, { option: true }],
+  credentials: [{ username: '', password: '', errorMessage: undefined }, { option: true }],
 
-  // создаём новый экземпляр authForm для каждого теста
   authForm: async ({ page, credentials }, use) => {
     const form = new authForm(page);
-    await form.goto();
-    await form.usernameFieldFill(credentials.username);
-    await form.passwordFieldFill(credentials.password);
-    await form.loginButtonAuthForm();
-
+    await form.login(credentials.username, credentials.password);
     await use(form);
     await page.context().clearCookies();
     await page.evaluate(() => {
@@ -26,22 +23,21 @@ const test = base.extend<Fixtures>({
   },
 });
 
-test.describe('Positive Login', () => {
-  test.use({
-    credentials: { username: 'standard_user', password: 'secret_sauce' },
-  });
+for (const [userKey, creds] of Object.entries(users)) {
+  test.describe(`Tests for user "${userKey}"`, () => {
+    test.use({ credentials: creds });
 
-  test('authorizationTest - valid login', async ({ authForm }) => {
-    await authForm.authorizationCheck();
+    if (userKey === 'standard') {
+      test('successful authorization', async ({ authForm }) => {
+        await authForm.authorizationCheck();
+      });
+    } else {
+      test('negative authorization test', async ({ authForm, credentials }) => {
+        const expectedError =
+          credentials.errorMessage ||
+          'Epic sadface: Username and password do not match any user in this service';
+        await authForm.exceptionAuth(expectedError);
+      });
+    }
   });
-});
-
-test.describe('Negative Login', () => {
-  test.use({
-    credentials: { username: 'wrong_user', password: 'wrong_password' },
-  });
-
-  test('negativeScenarioFirst - invalid login', async ({ authForm }) => {
-    await authForm.exceptionAuth();
-  });
-});
+}

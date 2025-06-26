@@ -1,11 +1,13 @@
 import { test as base } from '@playwright/test';
 import { authForm } from '../page/aForm';
+import { addProduct } from '../page/addProduct';
 import { shoppingContainer } from '../page/sContainer';
 import users from '../tests/data.json';
 
 type Fixtures = {
   credentials: { username: string; password: string };
   authForm: authForm;
+  addProduct: addProduct;
   containerCheck: shoppingContainer;
 };
 
@@ -30,21 +32,31 @@ const test = base.extend<Fixtures>({
     });
   },
 
+  addProduct: async ({ page }, use) => {
+    await use(new addProduct(page));
+  },
+
   containerCheck: async ({ page }, use) => {
     await use(new shoppingContainer(page));
   },
 });
 
-if (selectedCredentials.username === 'standard_user') {
-  test.describe('Positive scenarios', () => {
-    test.beforeEach(async ({ authForm }) => {
-      await authForm.authorizationCheck();
-    });
+test.beforeEach(async ({ authForm, credentials }) => {
+  if (credentials.username === 'standard_user') {
+    await authForm.authorizationCheck();
+  }
+});
 
-    test('container page checks', async ({ containerCheck }) => {
-      await containerCheck.redirectToContainer();
+if (selectedCredentials.username === 'standard_user') {
+  test.describe('Add product to container', () => {
+    test('add and remove product test', async ({ addProduct, containerCheck }) => {
+      await addProduct.productAddButtonToContainer();
+      await addProduct.goToCart();
+      await containerCheck.checkaddedProduct();
+      await addProduct.page.goBack();
+      await addProduct.productRemoveButtonFromContainer();
+      await addProduct.goToCart();
       await containerCheck.checkContainerIsEmpty();
-      await containerCheck.checkButtonsOnConteiner();
     });
   });
 }

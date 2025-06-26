@@ -7,6 +7,7 @@ export class shoppingContainer {
   readonly containerQuantity: Locator;
   readonly continueShoppingButton: Locator;
   readonly checkoutButton: Locator;
+  readonly addedProduct:Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -15,6 +16,7 @@ export class shoppingContainer {
     this.containerQuantity = page.locator('[data-test="item-quantity"]')
     this.continueShoppingButton = page.locator('[data-test="continue-shopping"]')
     this.checkoutButton = page.locator('[data-test="checkout"]')
+    this.addedProduct = page.locator('[data-test="inventory-item-name"]')
 }
 
   async redirectToContainer() {
@@ -30,5 +32,9 @@ export class shoppingContainer {
 
   async checkContainerIsEmpty() {
     await expect(this.containerQuantity).toBeHidden();
+  }
+
+  async checkaddedProduct() {
+    await expect(this.addedProduct).toHaveText('Sauce Labs Backpack');
   }
 }
