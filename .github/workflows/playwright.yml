@@ -10,6 +10,9 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    env:
+      USER: standard
+
     strategy:
       matrix:
         browser: [chromium, firefox, webkit]
