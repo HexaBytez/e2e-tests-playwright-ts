@@ -35,8 +35,11 @@ jobs:
       - name: Run Playwright tests on ${{ matrix.browser }}
         run: npx playwright test --project=${{ matrix.browser }}
 
+      - name: Clean old Allure report
+        run: rm -rf allure-report
+
       - name: Generate Allure report
-        run: npx allure generate --clean -o allure-report allure-results || true
+        run: npx allure generate allure-results -o allure-report || true
 
       - name: Upload Playwright report
         if: always()
