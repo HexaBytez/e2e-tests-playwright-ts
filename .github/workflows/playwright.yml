@@ -29,6 +29,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Install Allure commandline
+        run: npm install -g allure-commandline --no-save
+
       - name: Install Playwright browsers
         run: npx playwright install --with-deps
 
@@ -42,7 +45,7 @@ jobs:
         run: rm -rf allure-report || true
 
       - name: Generate Allure report
-        run: npx allure generate allure-results -o allure-report || true
+        run: allure generate allure-results -o allure-report || true
 
       - name: Upload Playwright HTML report
         if: always()
@@ -56,4 +59,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: allure-report-${{ matrix.browser }}
-          path: allure-repor
+          path: allure-report
