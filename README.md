@@ -1,29 +1,51 @@
 # e2e-auth-tests-playwright-ts
-Автоматизированные E2E тесты с использованием Playwright и TypeScript.
+Автоматизированные E2E тесты для сценариев тестирования демо проекта saucedemo.com с использованием Playwright и TypeScript.
 
-## Описание 
-Тесты написаны на Playwright с TypeScript с применением паттерна Page Object для удобства поддержки и масштабирования.
+# Описание
+Выполнение e2e тестов демо приложения saucedemo.com.
 
 ## Установка
 Клонируйте репозиторий:
-
 bash
-git clone https://github.com/<your-username>/e2e-auth-tests-playwright-ts.git
-cd e2e-auth-tests-playwright-ts
+git clone https://github.com/<your-username>/e2e-tests-playwright-ts.git
+cd e2e-tests-playwright-ts
 
-Установите зависимости:
+## Установите зависимости:
 npm install
-Запустить все тесты:
-npx playwright test
 
-Запустить тесты с HTML-отчётом:
-npx playwright test --reporter=html
-Отчёт появится в папке playwright-report.
+## Установить Playwright
+npx playwright install
 
-Следуйте типизации TypeScript и стандартам Playwright.
+## Запуск тестов:
+npx playwright test - запуск всех тестов
+npx playwright test --headed - Запуск тестов с отображением браузера
+npx playwright test --debug - Запуск тестов в режиме отладки
 
-Полезные команды
-npm install	Установить зависимости
-npx playwright test	Запуск всех тестов
-npx playwright test --debug	Запуск тестов в режиме отладки
-npx playwright show-report	Просмотр отчёта
+## Запуск тестов в GitHub Acnions
+Тесты автоматически запускаются при создании сборки pull request.
+Также тесты можно запустить вручную на странице Actions вашего репозитория.
+
+Отчеты автоматически формируются в html и Allure
+
+## Структура проекта
+├── tests/                # Каталог с тестами
+├── page/                 # Каталог с Page Object — объектами страниц
+├── playwright.config.ts  # Конфигурационный файл Playwright
+├── package.json          # Управление зависимостями и скриптами
+└── README.md             # Документация проекта
+
+## Полезные команды
+
+| Команда                                       | Описание                                         |
+| --------------------------------------------- | ------------------------------------------------ |
+| `npx playwright test`                         | Запуск всех тестов                               |
+| `npx playwright test --headed`                | Запуск тестов с видимым браузером                |
+| `npx playwright test --debug`                 | Запуск тестов в режиме отладки                   |
+| `npx playwright test --project=chromium`      | Запуск тестов только в Chromium                  |
+| `npx playwright test --project=firefox`       | Запуск тестов только в Firefox                   |
+| `npx playwright test --project=webkit`        | Запуск тестов только в WebKit                    |
+| `npx playwright test --grep "название_теста"` | Запуск тестов с фильтром по названию или тегу    |
+| `npx playwright test --retries=2`             | Повторный запуск неудачных тестов до 2 раз       |
+| `npx playwright show-report`                  | Просмотр HTML-отчёта после тестов                |
+| `npx playwright install`                      | Установка браузеров Playwright                   |
+| `npx playwright codegen <url>`                | Генерация кода теста на лету при работе с сайтом |
