@@ -1,6 +1,6 @@
 import { test as base } from '@playwright/test';
 import { authForm } from '../page/aForm';
-import { shoppingContainer } from '../page/sContainer';
+import { menuContainer } from '../page/menuContainer';
 import users from '../tests/data.json';
 
 type UserType = 'standard' | 'locked' | 'wrong';
@@ -21,7 +21,7 @@ if (!selectedCredentials) {
 type Fixtures = {
   credentials: { username: string; password: string };
   authForm: authForm;
-  containerCheck: shoppingContainer;
+  containerMenu: menuContainer;
 };
 
 const test = base.extend<Fixtures>({
@@ -38,21 +38,23 @@ const test = base.extend<Fixtures>({
     });
   },
 
-  containerCheck: async ({ page }, use) => {
-    await use(new shoppingContainer(page));
+  containerMenu: async ({ page }, use) => {
+    await use(new menuContainer(page));
   },
 });
 
 if (selectedCredentials.username === 'standard_user') {
-  test.describe('Positive scenarios', () => {
+  test.describe('Positive scenarios for menu items', () => {
     test.beforeEach(async ({ authForm }) => {
       await authForm.authorizationCheck();
     });
 
-    test('container page checks', async ({ containerCheck }) => {
-      await containerCheck.redirectToContainer();
-      await containerCheck.checkContainerIsEmpty();
-      await containerCheck.checkButtonsOnConteiner();
+    test('menu items check', async ({ containerMenu }) => {
+      await containerMenu.clickMenuBlock();
+      await containerMenu.allItemsItem();
+      await containerMenu.aboutItem();
+      await containerMenu.logoutItem();
+      await containerMenu.resetAppStateItem();
     });
   });
 }

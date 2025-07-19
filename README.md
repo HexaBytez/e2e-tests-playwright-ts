@@ -7,9 +7,10 @@
 ## Установка
 Клонируйте репозиторий:
 bash
-git clone https://github.com/your-username/e2e-tests-playwright-ts.git
 
-cd e2e-tests-playwright-ts
+git clone https://github.com/<your-username>/e2e-tests-playwright-ts.git
+cd e2e-auth-tests-playwright-ts
+
 
 ## Установите зависимости
 npm install
