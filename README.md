@@ -7,10 +7,12 @@
 ## Установка
 Клонируйте репозиторий:
 bash
+
 git clone https://github.com/<your-username>/e2e-tests-playwright-ts.git
 cd e2e-auth-tests-playwright-ts
 
-## Установите зависимости:
+
+## Установите зависимости
 npm install
 
 ## Установить Playwright
@@ -18,7 +20,9 @@ npx playwright install
 
 ## Запуск тестов:
 npx playwright test - запуск всех тестов
+
 npx playwright test --headed - Запуск тестов с отображением браузера
+
 npx playwright test --debug - Запуск тестов в режиме отладки
 
 ## Запуск тестов в GitHub Acnions
@@ -29,9 +33,13 @@ npx playwright test --debug - Запуск тестов в режиме отла
 
 ## Структура проекта
 ├── tests/                # Каталог с тестами
+
 ├── page/                 # Каталог с Page Object — объектами страниц
+
 ├── playwright.config.ts  # Конфигурационный файл Playwright
+
 ├── package.json          # Управление зависимостями и скриптами
+
 └── README.md             # Документация проекта
 
 ## Полезные команды
