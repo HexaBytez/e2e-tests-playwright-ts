@@ -2,23 +2,31 @@ import { test as base } from '@playwright/test';
 import { authForm } from '../page/aForm';
 import { addProduct } from '../page/addProduct';
 import { shoppingContainer } from '../page/sContainer';
-import users from '../tests/data.json';
+import usersData from '../tests/data.json';
 
-type Fixtures = {
-  credentials: { username: string; password: string };
-  authForm: authForm;
-  addProduct: addProduct;
-  containerCheck: shoppingContainer;
+type UserKey = keyof typeof usersData;
+
+type UserCredentials = {
+  username: string;
+  password: string;
+  errorMessage: string;
 };
 
-const userKey = process.env.USER || 'standard';
-const selectedCredentials = users[userKey];
+const userKey = (process.env.USER as UserKey) || 'standard';
+const selectedCredentials = usersData[userKey];
 
 if (!selectedCredentials) {
   throw new Error(`User "${userKey}" not found in users.json`);
 }
 
-const test = base.extend<Fixtures>({
+const isStandardUser = selectedCredentials.username === 'standard_user';
+
+const test = base.extend<{
+  credentials: UserCredentials;
+  authForm: authForm;
+  addProduct: addProduct;
+  containerCheck: shoppingContainer;
+}>({
   credentials: [selectedCredentials, { option: true }],
 
   authForm: async ({ page, credentials }, use) => {
@@ -41,22 +49,22 @@ const test = base.extend<Fixtures>({
   },
 });
 
-test.beforeEach(async ({ authForm, credentials }) => {
-  if (credentials.username === 'standard_user') {
+test.beforeEach(async ({ authForm }) => {
+  if (isStandardUser) {
     await authForm.authorizationCheck();
   }
 });
 
-if (selectedCredentials.username === 'standard_user') {
-  test.describe('Add product to container', () => {
-    test('add and remove product test', async ({ addProduct, containerCheck }) => {
-      await addProduct.productAddButtonToContainer();
-      await addProduct.goToCart();
-      await containerCheck.checkaddedProduct();
-      await addProduct.page.goBack();
-      await addProduct.productRemoveButtonFromContainer();
-      await addProduct.goToCart();
-      await containerCheck.checkContainerIsEmpty();
-    });
+test.describe(isStandardUser ? 'Add product to container' : 'Skipped for non-standard users', () => {
+  test.skip(!isStandardUser, 'Test is only for standard_user');
+
+  test('add and remove product test', async ({ addProduct, containerCheck }) => {
+    await addProduct.productAddButtonToContainer();
+    await addProduct.goToCart();
+    await containerCheck.checkaddedProduct();
+    await addProduct.page.goBack();
+    await addProduct.productRemoveButtonFromContainer();
+    await addProduct.goToCart();
+    await containerCheck.checkContainerIsEmpty();
   });
-}
+});
