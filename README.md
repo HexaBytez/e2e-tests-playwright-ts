@@ -57,3 +57,6 @@ npx playwright test --debug - Запуск тестов в режиме отла
 | `npx playwright show-report`                  | Просмотр HTML-отчёта после тестов                |
 | `npx playwright install`                      | Установка браузеров Playwright                   |
 | `npx playwright codegen <url>`                | Генерация кода теста на лету при работе с сайтом |
+
+
+
