@@ -13,7 +13,9 @@ export default defineConfig({
     }],
     ['html', { outputFolder: 'playwright-report', open: 'never' }],
   ],
+
   timeout: 30 * 1000,
+
   projects: [
     {
       name: 'chromium',

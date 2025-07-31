@@ -1,16 +1,11 @@
+// tests/api/api.spec.ts
 import { test, expect, request, APIRequestContext } from '@playwright/test';
 import { allure } from 'allure-playwright';
+import apiUsers from '../data/apiData.json';
 
 test.describe('User API', () => {
   let apiContext: APIRequestContext;
-
-  const newUser = {
-    name: 'John Doe',
-    username: 'johndoe',
-    email: 'john.doe@example.com',
-    phone: '1-800-123-4567',
-    website: 'johndoe.com'
-  };
+  const { newUser } = apiUsers;
 
   test.beforeAll(async () => {
     apiContext = await request.newContext({
@@ -29,7 +24,6 @@ test.describe('User API', () => {
 
       const body = await response.json();
 
-      // Вложения в Allure
       allure.attachment('Request Payload', JSON.stringify(newUser, null, 2), 'application/json');
       allure.attachment('Response Body', JSON.stringify(body, null, 2), 'application/json');
 
