@@ -1,6 +1,8 @@
 # e2e-auth-tests-playwright-ts
 Автоматизированные E2E тесты для сценариев тестирования демо проекта saucedemo.com с использованием Playwright и TypeScript.
 
+🔤➡️ Automated E2E tests for test scenarios of the saucedemo.com demo project using Playwright and TypeScript.
+
 # Описание
 Выполнение e2e тестов демо приложения saucedemo.com.
 
@@ -57,6 +59,3 @@ npx playwright test --debug - Запуск тестов в режиме отла
 | `npx playwright show-report`                  | Просмотр HTML-отчёта после тестов                |
 | `npx playwright install`                      | Установка браузеров Playwright                   |
 | `npx playwright codegen <url>`                | Генерация кода теста на лету при работе с сайтом |
-
-
-
