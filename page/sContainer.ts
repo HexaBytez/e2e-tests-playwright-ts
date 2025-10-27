@@ -11,7 +11,7 @@ export class shoppingContainer {
 
   constructor(page: Page) {
     this.page = page;
-    this.containerButton = page.locator('[id="shopping_cart_container"]');
+    this.containerButton = page.getByTestId('shopping_cart_container');
     this.pageContainer = page.locator('[data-test="title"]')
     this.containerQuantity = page.locator('[data-test="item-quantity"]')
     this.continueShoppingButton = page.locator('[data-test="continue-shopping"]')
