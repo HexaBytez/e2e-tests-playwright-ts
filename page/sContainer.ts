@@ -1,4 +1,5 @@
 import { Page, Locator, expect } from '@playwright/test';
+import productsData from '../tests/data/productData.json';
 
 export class shoppingContainer {
   readonly page: Page;
@@ -10,6 +11,8 @@ export class shoppingContainer {
   readonly addedProduct:Locator;
   readonly qtyText: Locator;
   readonly descriptionText: Locator;
+  readonly added2Product: Locator;
+  readonly added3Product: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -18,9 +21,11 @@ export class shoppingContainer {
     this.containerQuantity = page.locator('[data-test="item-quantity"]')
     this.continueShoppingButton = page.getByRole('button', { name: /Continue Shopping/i });
     this.checkoutButton = page.getByRole('button', { name: /Checkout/i } );
-    this.addedProduct = page.locator('[data-test="inventory-item-name"]');
+    this.addedProduct = page.locator('a[data-test="item-4-title-link"] > div.inventory_item_name');
     this.qtyText = page.getByText('QTY');
     this.descriptionText = page.getByText('Description')
+    this.added2Product = page.locator('a[data-test="item-1-title-link"] > div.inventory_item_name');
+    this.added3Product = page.locator('a[data-test="item-0-title-link"] > div.inventory_item_name');
 }
 
   async redirectToContainer() {
@@ -44,6 +49,15 @@ export class shoppingContainer {
   }
 
   async checkaddedProduct() {
-    await expect(this.addedProduct).toHaveText('Sauce Labs Backpack');
+    await expect(this.addedProduct).toHaveText(productsData.firstProductName);
   }
+
+  async checkSecondProduct() {
+    await await expect(this.added2Product).toHaveText(productsData.secondProductName);
+  }
+
+  async checkThirdProduct() {
+    await await expect(this.added3Product).toHaveText(productsData.thirdProductName);
+  }
+
 }
