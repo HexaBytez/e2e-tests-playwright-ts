@@ -59,3 +59,17 @@ npx playwright test --debug - Запуск тестов в режиме отла
 | `npx playwright show-report`                  | Просмотр HTML-отчёта после тестов                |
 | `npx playwright install`                      | Установка браузеров Playwright                   |
 | `npx playwright codegen <url>`                | Генерация кода теста на лету при работе с сайтом |
+| `npx playwright test api/api.spec.ts`         | Запуск выборочных тестов                         |
+
+
+## Отчеты
+
+Очистить папку с отчетами:
+
+cmd /c "rmdir /s /q allure-results"
+cmd /c "rmdir /s /q allure-report"
+
+Сформировать новые отчеты после выполнения тестов:
+
+npx allure generate allure-results --clean -o allure-report
+npx allure open allure-report
