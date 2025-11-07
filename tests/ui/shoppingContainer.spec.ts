@@ -11,5 +11,6 @@ test.describe('Positive scenarios for menu items', () => {
     await containerCheck.redirectToContainer();
     await containerCheck.checkContainerIsEmpty();
     await containerCheck.checkButtonsOnConteiner();
+    await containerCheck.checkTextOnContainer();
   });
 });

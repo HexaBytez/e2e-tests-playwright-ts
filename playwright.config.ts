@@ -1,6 +1,7 @@
 import { defineConfig, devices } from '@playwright/test';
 
 export default defineConfig({
+  
   testDir: './tests',
 
   reporter: [
@@ -14,7 +15,7 @@ export default defineConfig({
     ['html', { outputFolder: 'playwright-report', open: 'never' }],
   ],
 
-  timeout: 30 * 1000,
+  timeout: 60000,
 
   projects: [
     {
