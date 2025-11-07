@@ -51,19 +51,28 @@ test.describe('User API', () => {
   });
 
   test('POST /users - create a new user (mocked)', async () => {
-    const mockResponse = { id: 999, ...newUser };
+  const randomId = Date.now();
 
-    await test.info().attach('Request Payload', {
-      body: Buffer.from(JSON.stringify(newUser, null, 2)),
-      contentType: 'application/json',
-    });
+  const newUser = {
+    username: `user_${randomId}`,
+    email: `user_${randomId}@example.com`,
+    password: `Password${Math.floor(Math.random() * 10000)}`,
+    firstName: `FirstName${randomId}`,
+    lastName: `LastName${randomId}`
+  };
 
-    await test.info().attach('Mocked Response Body', {
-      body: Buffer.from(JSON.stringify(mockResponse, null, 2)),
-      contentType: 'application/json',
-    });
+  const mockResponse = { id: randomId, ...newUser };
+  await test.info().attach('Request Payload', {
+    body: Buffer.from(JSON.stringify(newUser, null, 2)),
+    contentType: 'application/json',
+  });
 
-    expect(mockResponse).toMatchObject(newUser);
-    expect(mockResponse).toHaveProperty('id', 999);
+  await test.info().attach('Mocked Response Body', {
+    body: Buffer.from(JSON.stringify(mockResponse, null, 2)),
+    contentType: 'application/json',
+  });
+
+  expect(mockResponse).toMatchObject(newUser);
+  expect(mockResponse).toHaveProperty('id', randomId);
   });
 });
