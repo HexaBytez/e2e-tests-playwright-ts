@@ -1,5 +1,5 @@
 import { test as base, type Page, type TestInfo } from '@playwright/test';
-import { authForm } from '../page/aForm';
+import { authForm } from '../page/authForm';
 import { menuContainer } from '../page/menuContainer';
 import { addProduct } from '../page/addProduct';
 import { shoppingContainer } from '../page/sContainer';
