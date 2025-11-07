@@ -16,7 +16,7 @@ export default defineConfig({
   ],
 
   timeout: 60000,
-
+  //retries: 2,
   projects: [
     {
       name: 'chromium',
@@ -30,5 +30,9 @@ export default defineConfig({
       name: 'webkit',
       use: { ...devices['Desktop Safari'] },
     },
+    // {
+    //   name: 'mobile-chrome',  
+    //   use: { ...devices['Pixel 8'] },
+    // },
   ],
 });
