@@ -6,6 +6,26 @@ on:
   pull_request:
     branches: [ main ]
   workflow_dispatch:
+    inputs:
+      browser:
+        description: 'Browser to run tests'
+        required: false
+        default: 'All'
+        type: choice
+        options:
+          - All
+          - chromium
+          - firefox
+          - webkit
+      testType:
+        description: 'Type of tests to run'
+        required: false
+        default: 'All'
+        type: choice
+        options:
+          - All
+          - UI
+          - API
 
 jobs:
   test:
@@ -15,7 +35,8 @@ jobs:
 
     strategy:
       matrix:
-        browser: [chromium, firefox, webkit]
+        browser: ${{ github.event.inputs.browser == 'All' || github.event.inputs.browser == '' 
+                      && 'chromium,firefox,webkit' || github.event.inputs.browser }}
 
     steps:
       - name: Checkout repository
@@ -35,8 +56,15 @@ jobs:
       - name: Install Playwright browsers
         run: npx playwright install
 
-      - name: Run Playwright tests on ${{ matrix.browser }}
-        run: npx playwright test --project=${{ matrix.browser }}
+      - name: Run Playwright tests
+        run: |
+          if [ "${{ github.event.inputs.testType }}" = "UI" ]; then
+            npx playwright test tests/ui --project=${{ matrix.browser }}
+          elif [ "${{ github.event.inputs.testType }}" = "API" ]; then
+            npx playwright test tests/api --project=${{ matrix.browser }}
+          else
+            npx playwright test --project=${{ matrix.browser }}
+          fi
 
       - name: Generate Playwright HTML report
         run: npx playwright show-report --reporter=html --output=playwright-report || true
