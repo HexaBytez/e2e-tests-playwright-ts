@@ -20,6 +20,7 @@ test.describe('Add product to container', () => {
       await addProduct.productRemoveButtonFromContainer();
       await addProduct.goToCart();
       await containerCheck.checkContainerIsEmpty();
+      
     });
 
     await test.step('Add many products to cart', async () => {

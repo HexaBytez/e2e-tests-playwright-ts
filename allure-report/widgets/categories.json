@@ -1,1 +1,1 @@
-{"total":0,"items":[]}
+{"total":2,"items":[{"uid":"8a9270a48a3da810461bad5544c4d612","name":"Critical Failures","statistic":{"failed":3,"broken":0,"skipped":0,"passed":0,"unknown":0,"total":3}},{"uid":"85646a29c9a85eb9066bee89566dbdf8","name":"Skipped Tests","statistic":{"failed":0,"broken":0,"skipped":6,"passed":0,"unknown":0,"total":6}}]}
