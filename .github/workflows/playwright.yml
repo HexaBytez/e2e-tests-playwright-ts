@@ -30,13 +30,11 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    env:
-      USER: standard
-
     strategy:
       matrix:
-        browser: ${{ github.event.inputs.browser == 'All' || github.event.inputs.browser == '' 
-                      && 'chromium,firefox,webkit' || github.event.inputs.browser }}
+        browser: ${{ fromJSON('["chromium","firefox","webkit"]') }}
+    # Этот шаг заменяется, если выбран конкретный браузер
+    if: ${{ github.event.inputs.browser == 'All' || github.event.inputs.browser == '' }}
 
     steps:
       - name: Checkout repository
@@ -58,12 +56,13 @@ jobs:
 
       - name: Run Playwright tests
         run: |
-          if [ "${{ github.event.inputs.testType }}" = "UI" ]; then
-            npx playwright test tests/ui --project=${{ matrix.browser }}
-          elif [ "${{ github.event.inputs.testType }}" = "API" ]; then
-            npx playwright test tests/api --project=${{ matrix.browser }}
+          BROWSER="${{ github.event.inputs.browser }}"
+          if [ "$BROWSER" != "All" ] && [ "$BROWSER" != "" ]; then
+            echo "Running on selected browser: $BROWSER"
+            npx playwright test --project=$BROWSER $( [ "${{ github.event.inputs.testType }}" != "All" ] && echo "tests/${{ github.event.inputs.testType | downcase }}" )
           else
-            npx playwright test --project=${{ matrix.browser }}
+            echo "Running on all browsers"
+            npx playwright test $( [ "${{ github.event.inputs.testType }}" != "All" ] && echo "tests/${{ github.event.inputs.testType | downcase }}" )
           fi
 
       - name: Generate Playwright HTML report
@@ -79,12 +78,12 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: playwright-report-${{ matrix.browser }}
+          name: playwright-report
           path: playwright-report
 
       - name: Upload Allure report
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: allure-report-${{ matrix.browser }}
+          name: allure-report
           path: allure-report
