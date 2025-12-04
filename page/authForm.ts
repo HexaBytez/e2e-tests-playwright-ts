@@ -44,6 +44,7 @@ export class authForm {
 
   async authorizationCheck() {
     await this.loginButtonAuth.waitFor({ state: 'hidden' });
+    await expect(this.loginButtonAuth).toBeHidden();  //alternative check
     await expect(this.page).toHaveURL(/.*inventory\.html/);
     await expect(this.page.locator('.inventory_list')).toBeVisible();
   }
