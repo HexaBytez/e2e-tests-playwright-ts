@@ -54,3 +54,4 @@ export class authForm {
     await expect(this.errorField).toHaveText(expectedMessage);
   }
 }
+
