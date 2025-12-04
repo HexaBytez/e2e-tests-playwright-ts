@@ -30,11 +30,8 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        browser: ${{ fromJSON('["chromium","firefox","webkit"]') }}
-    # Этот шаг заменяется, если выбран конкретный браузер
-    if: ${{ github.event.inputs.browser == 'All' || github.event.inputs.browser == '' }}
+    env:
+      USER: standard
 
     steps:
       - name: Checkout repository
@@ -57,12 +54,20 @@ jobs:
       - name: Run Playwright tests
         run: |
           BROWSER="${{ github.event.inputs.browser }}"
+          TEST_TYPE="${{ github.event.inputs.testType }}"
+
+          # Преобразуем тип тестов в lowercase для пути
+          TEST_DIR=""
+          if [ "$TEST_TYPE" != "All" ]; then
+            TEST_DIR="tests/$(echo $TEST_TYPE | tr '[:upper:]' '[:lower:]')"
+          fi
+
           if [ "$BROWSER" != "All" ] && [ "$BROWSER" != "" ]; then
             echo "Running on selected browser: $BROWSER"
-            npx playwright test --project=$BROWSER $( [ "${{ github.event.inputs.testType }}" != "All" ] && echo "tests/${{ github.event.inputs.testType | downcase }}" )
+            npx playwright test --project=$BROWSER $TEST_DIR
           else
             echo "Running on all browsers"
-            npx playwright test $( [ "${{ github.event.inputs.testType }}" != "All" ] && echo "tests/${{ github.event.inputs.testType | downcase }}" )
+            npx playwright test $TEST_DIR
           fi
 
       - name: Generate Playwright HTML report
