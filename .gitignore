@@ -7,3 +7,4 @@ node_modules/
 /playwright/.cache/
 /console.log
 allure-results
+allure-report
