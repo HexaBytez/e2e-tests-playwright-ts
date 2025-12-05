@@ -51,5 +51,5 @@ README.md             # Документация
 | `npx playwright test --retries=2`                            | Повторный запуск неудачных тестов до 2 раз       |
 | `npx playwright show-report`                                 | Просмотр HTML-отчёта после тестов                |
 | `npx playwright test api/api.spec.ts`                        | Запуск выборочных тестов                         |
-| `npx allure generate allure-results --clean -o allure-report`| Очистить папку с отчетами                         |
+| `npx allure generate allure-results --clean -o allure-report`| Очистить папку с отчетами                        |
 | `npx allure open allure-report`                              | Открыть репорт после выполнения тестов           |
